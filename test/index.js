@@ -1,5 +1,5 @@
 var test = require('tap').test
-var createProxy = require('index.js')
+var createProxy = require('../index.js')
 var http = require('http')
 var request = require('request')
 
