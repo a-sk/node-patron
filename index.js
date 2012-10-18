@@ -3,9 +3,15 @@ module.exports = function(proxyTable) {
 var http = require('http')
   , url = require('url')
   , httpProxy = require('http-proxy')
-  , debug = require('debug')('lib-proxy')
   , S = require('string')
-  , EE = require('events').EventEmitter
+  , EE = require('events').EventEmitter;
+
+try {
+  var debug = require('debug')('patron')
+} catch (e) {
+  // production
+  var debug = function() {}
+}
 
 var decorate = require('./decorate.js')
 var server = http.createServer();

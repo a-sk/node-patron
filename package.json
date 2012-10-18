@@ -7,12 +7,12 @@
   "dependencies": {
       "http-proxy": "*",
       "bunyan": "*",
-      "string": "*",
-      "debug": "*"
+      "string": "*"
   },
   "devDependencies": {
       "tap": "*",
-      "request": "*"
+      "request": "*",
+      "debug": "*"
   },
   "scripts": {
       "test": "npm test"
