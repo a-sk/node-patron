@@ -38,17 +38,19 @@ function getFirstKey(obj) { return Object.keys(obj)[0] }
 
 server.on('request', function(req, res) {
   debug('new HTTP request')
+  decorate(req, res)
   handleProxying({
-    req: decorate(req),
+    req: req,
     res: res,
     protocol: 'http'
   })
-
 })
+
 server.on('upgrade', function(req, socket, head) {
   debug('new UPGRADE request')
+  decorate(req, socket)
   handleProxying({
-    req: decorate(req),
+    req: req,
     socket: socket,
     head: head,
     protocol: 'websockets'
@@ -60,7 +62,7 @@ function handleProxying(net) {
   // get proxy rule for this host + url
   var rule = proxyTableLookup(proxyTable, href)
   if (!rule) {
-    debug('Rule for %s was not found', rule)
+    debug('Rule for was not found')
     net.req.logger.error('Bad request');
     net.res.writeHead(404, { 'Content-Type': 'text/plain' });
     net.res.write('You are wrong');
