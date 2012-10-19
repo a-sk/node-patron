@@ -60,6 +60,7 @@ function handleProxying(net) {
   // get proxy rule for this host + url
   var rule = proxyTableLookup(proxyTable, href)
   if (!rule) {
+    debug('Rule for %s was not found', rule)
     net.req.logger.error('Bad request');
     net.res.writeHead(404, {
       'Content-Type': 'text/plain'
