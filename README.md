@@ -45,4 +45,19 @@ var router = {
 createProxyServer(router).listen(80)
 ```
 
+# Explanations
+
+## Configuration
+Router is an object where key is rule and value is action.
+Rule is always a string. Host with or without url part
+Action can be:
+ - simple string like `host:port`
+ - object like {to: 'host:port', ws:true, http:false}
+   by default ws is false, http is true
+ - function, witch accepts 2 arguments
+    - object net {req:http.request, res:http.responce, protocol:string}
+    - function proxy witch accepts net object and string 'host:port'
+
+
+## Plugins
 
