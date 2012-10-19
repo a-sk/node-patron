@@ -62,9 +62,7 @@ function handleProxying(net) {
   if (!rule) {
     debug('Rule for %s was not found', rule)
     net.req.logger.error('Bad request');
-    net.res.writeHead(404, {
-      'Content-Type': 'text/plain'
-    });
+    net.res.writeHead(404, { 'Content-Type': 'text/plain' });
     net.res.write('You are wrong');
     return net.res.end()
   }
@@ -83,6 +81,12 @@ function handleProxying(net) {
       proxy(net, rule.to)
     } else if ( rule.http !== false && net.protocol === 'http' ) {
       proxy(net, rule.to)
+    } else {
+      debug('Error, wrong configuration %s', JSON.stringify(rule))
+      net.req.logger.error('Bad request');
+      net.res.writeHead(500, { 'Content-Type': 'text/plain' });
+      net.res.write('Something went wrong.');
+      return net.res.end()
     }
   }
 }
