@@ -106,10 +106,10 @@ function proxy(net, address) {
   debug('Proxying %s%s to %s%s', net.req.headers.host, net.req.url, address, net.req.url)
   debug('Protocol is %s', net.protocol)
   if (net.protocol === 'http') {
-    net.req.logger.info('Proxying http to ' + address)
+    net.req.log('Proxying http to ' + address)
     return proxyFor(address).proxyRequest(net.req, net.res)
   } else if (net.protocol === 'websockets') {
-    net.req.logger.info('Proxying websockets to ' + address)
+    net.req.log('Proxying websockets to ' + address)
     return proxyFor(address).proxyWebSocketRequest(net.req, net.socket, net.head)
   }
 }
