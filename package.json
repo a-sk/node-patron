@@ -1,6 +1,6 @@
 {
   "name": "patron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "node-http-proxy wrapper",
   "keywords": ["proxy", "reverse", "http"],
   "author": "ask <a.skurihin@gmail.com>",
