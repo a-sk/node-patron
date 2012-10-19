@@ -1,10 +1,20 @@
 module.exports = function(proxyTable) {
 
 var http = require('http')
-  , url = require('url')
-  , httpProxy = require('http-proxy')
-  , S = require('string')
-  , EE = require('events').EventEmitter;
+, url = require('url')
+, httpProxy = require('http-proxy')
+, S = require('string')
+, EE = require('events').EventEmitter
+, domain = require('domain')
+, bunyan = require('bunyan')
+, fs = require('fs')
+
+var logfile = process.argv[2] ? fs.createWriteStream(process.argv[2]) : null;
+
+var logger = bunyan.createLogger({
+  name: 'proxy',
+  stream: logfile ? logfile : process.stdout
+});
 
 try {
   var debug = require('debug')('patron')
@@ -13,13 +23,13 @@ try {
   var debug = function() {}
 }
 
-var decorate = require('./decorate.js')
+var decorate = require('./decorate.js')(logger)
 var server = http.createServer();
 var bus = new EE();
 
 bus.on('add', function(rule) {
-  var ruleName = getFirstKey(rule)
   debug('Got add event')
+  var ruleName = getFirstKey(rule)
   proxyTable[ruleName] = rule[ruleName]
   debug('rule for %s was added', ruleName)
 })
@@ -31,7 +41,11 @@ bus.on('remove', function(ruleName) {
 })
 
 server.use = function use(plugin) {
-  plugin(bus)
+  var d = domain.create()
+  d.on('error', function (err) {
+    logger.error({error:err})
+  })
+  d.run(function() {plugin(bus)})
 }
 
 function getFirstKey(obj) { return Object.keys(obj)[0] }

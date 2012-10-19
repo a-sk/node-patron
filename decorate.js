@@ -1,15 +1,7 @@
-var bunyan = require('bunyan')
-  , fs = require('fs')
-  , crypto = require('crypto')
-  , S = require('string')
-  , domain = require("domain")
+var crypto = require('crypto')
+, S = require('string')
+, domain = require("domain")
 
-var logfile = fs.createWriteStream(process.argv[2] || __dirname + '/proxy.log');
-
-var logger = bunyan.createLogger({
-  name: 'proxy',
-  stream: logfile
-});
 
 var logreq = function(req) {
   return {
@@ -20,12 +12,10 @@ var logreq = function(req) {
   };
 };
 
-module.exports = decorate
 
-function decorate(req, res) {
+function decorate(req, res, logger) {
   var req_id = crypto.randomBytes(4).toString('hex');
   req.logger = logger.child({
-    serializers: bunyan.stdSerializers,
     req_id: req_id
   });
   req.log = function(msg) {
@@ -64,5 +54,9 @@ function decorate(req, res) {
       d.dispose()
     }
   })
+}
+
+module.exports = function (logger) {
+  return function(req, res) {decorate(req, res, logger)}
 }
 
