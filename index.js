@@ -81,7 +81,7 @@ function handleProxying(net) {
     debug('Found object rule')
     if ( rule.ws === true && net.protocol === 'websockets') {
       proxy(net, rule.to)
-    } else if ( rule.http !== false && net.prototype === 'http' ) {
+    } else if ( rule.http !== false && net.protocol === 'http' ) {
       proxy(net, rule.to)
     }
   }
