@@ -31,7 +31,7 @@ var bus = new EE();
 if (https === true) {
   server._listen = server.listen
   server.listen = function(options, cb) {
-    var https = require('ssl')(options)
+    var https = require('./ssl.js')(options)
     server._listen(options.http)
     if (cb) {
       cb()
