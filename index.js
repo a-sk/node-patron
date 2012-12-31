@@ -1,4 +1,4 @@
-module.exports = function(proxyTable) {
+module.exports = function(proxyTable, https) {
 
 var http = require('http')
 , url = require('url')
@@ -8,6 +8,7 @@ var http = require('http')
 , domain = require('domain')
 , bunyan = require('bunyan')
 , fs = require('fs')
+
 
 var logfile = process.argv[2] ? fs.createWriteStream(process.argv[2]) : null;
 
@@ -26,6 +27,17 @@ try {
 var decorate = require('./decorate.js')(logger)
 var server = http.createServer();
 var bus = new EE();
+
+if (https === true) {
+  server._listen = server.listen
+  server.listen = function(options, cb) {
+    var https = require('ssl')(options)
+    server._listen(options.http)
+    if (cb) {
+      cb()
+    }
+  }
+}
 
 bus.on('add', function(rule) {
   debug('Got add event')
