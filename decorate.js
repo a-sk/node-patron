@@ -21,6 +21,9 @@ function decorate(req, res, logger) {
   req.log = function(msg) {
     return req.logger.info(logreq(req), msg);
   };
+  req.err = function(msg) {
+    return req.logger.error(logreq(req), msg);
+  };
   req.headers['X-Request-Id'] = req_id;
   // add usefull string methods to req.url
   req.url = S(req.url)

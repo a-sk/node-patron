@@ -89,7 +89,7 @@ function handleProxying(net) {
   var rule = proxyTableLookup(proxyTable, href)
   if (!rule) {
     debug('Rule for was not found')
-    net.req.logger.error('Bad request');
+    net.req.err('Bad request');
     net.res.writeHead(404, { 'Content-Type': 'text/plain' });
     net.res.write('You are wrong');
     return net.res.end()
@@ -111,7 +111,7 @@ function handleProxying(net) {
       proxy(net, rule.to)
     } else {
       debug('Error, wrong configuration %s', JSON.stringify(rule))
-      net.req.logger.error('Bad request');
+      net.req.err('Bad request');
       net.res.writeHead(500, { 'Content-Type': 'text/plain' });
       net.res.write('Something went wrong.');
       return net.res.end()
